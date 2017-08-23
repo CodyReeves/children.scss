@@ -18,10 +18,10 @@
 //          min: 4,
 //          max: 10
 //          )...) {
-//            color: color(greyscale, white);
+//            color: #fff;
 //          }
 
-@mixin child($type, $number: 0, $first: 0, $last: 0, $limit: 0, $min: 0, $max: 0, $types: $types) {
+@mixin child($type, $number: 0, $first: 0, $last: 0, $limit: 0, $min: 0, $max: 0) {
   // Sets selector
   $selector: '&';
 
@@ -35,7 +35,8 @@
     min: $min,
     max: $max,
   );
-
+  // TODO:: Make this a map of values
+  $types: children_config($number, $first, $last, $limit, $min, $max, $selector);
   // A small helper to list all avalible quieries
   // Usage: @include child(help);
   @if $type == help {

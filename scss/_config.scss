@@ -1,112 +1,116 @@
 
 // Sets the strings and required vars fro each child query
-$types: (
-  first: (
-    query-string: 'nth-child(-n + #{$number})',
-    required-vars: number,
-  ),
-  last: (
-    query-string: 'nth-last-child(-n + #{$number})',
-    required-vars: number
-  ),
-  after-first: (
-    query-string: 'nth-child(n + #{$number + 1})',
-    required-vars: number
-  ),
-  from-end: (
-    query-string: 'nth-last-child(#{$number})',
-    required-vars: number
-  ),
-  between: (
-    query-string: 'nth-child(n + #{$first}):nth-child(-n + #{$last})',
-    required-vars: first last
-  ),
-  even-between: (
-    query-string: 'nth-child(even):nth-child(n + #{$first}):nth-child(-n + #{$last})',
-    required-vars: first last
-  ),
-  odd-between: (
-    query-string: 'nth-child(odd):nth-child(n + #{$first}):nth-child(-n + #{$last})',
-    required-vars: first last
-  ),
-  n-between: (
-    query-string: 'nth-child(#{$number}n):nth-child(n + #{$first}):nth-child(-n + #{$last})',
-    required-vars: number first last
-  ),
-  all-but: (
-    query-string: 'not(:nth-child(#{$number}))',
-    required-vars: number
-  ),
-  each: (
-    query-string: 'nth-child(#{$number}n)',
-    required-vars: number
-  ),
-  every: (
-    query-string: 'nth-child(#{$number}n)',
-    required-vars: number
-  ),
-  from-first-last: (
-    query-string: 'nth-child(#{$number})' 'nth-last-child(#{$number})',
-    required-vars: number
-  ),
-  middle: (
-    query-string: 'nth-child(#{round($number / 2)})',
-    required-vars: number
-  ),
-  all-but-first-last: (
-    query-string: 'nth-child(n + #{$number}):nth-last-child(n + #{$number})',
-    required-vars: number
-  ),
-  first-of: (
-    query-string: 'nth-last-child(#{$limit}):first-child',
-    required-vars: limit
-  ),
-  last-of: (
-    query-string: 'nth-of-type(#{$limit}):nth-last-of-type(1)',
-    required-vars: limit
-  ),
-  at-least: (
-    query-string: 'nth-last-child(n + #{$number})' 'nth-last-child(n + #{$number}) ~ #{nth(nth($selector, -1), -1)}',
-    required-vars: number,
-  ),
-  at-most: (
-    query-string: 'nth-last-child(-n + #{$number}):first-child' 'nth-last-child(-n + #{$number}):first-child ~ #{nth(nth($selector, -1), -1)}',
-    required-vars: number,
-  ),
-  in-between: (
-    query-string: 'nth-last-child(n + #{$min}):nth-last-child(-n + #{$max}):first-child' 'nth-last-child(n + #{$min}):nth-last-child(-n + #{$max}):first-child ~ #{nth(nth($selector, -1), -1)}',
-    required-vars: min max,
-  ),
-  first-child: (
-    query-string: 'first-of-type',
-    required-vars: type
-  ),
-  last-child: (
-    query-string: 'last-of-type',
-    required-vars: type
-  ),
-  even: (
-    query-string: 'nth-child(even)',
-    required-vars: type
-  ),
-  odd: (
-    query-string: 'nth-child(odd)',
-    required-vars: type
-  ),
-  last-first: (
-    query-string: 'first-child' 'last-child',
-    required-vars: type
-  ),
-  unique: (
-    query-string: 'only-child',
-    required-vars: type
-  ),
-  only: (
-    query-string: 'only-child',
-    required-vars: type
-  ),
-  not-unique: (
-    query-string: 'not(:only-child)',
-    required-vars: type
-  )
-) !global;
+@function children_config($number: '', $first: '', $last: '', $limit: '', $min: '', $max: '', $selector: '', $custom: $childrenCustomConfig) {
+  $types: (
+    first: (
+      query-string: 'nth-child(-n + #{$number})',
+      required-vars: number,
+    ),
+    last: (
+      query-string: 'nth-last-child(-n + #{$number})',
+      required-vars: number
+    ),
+    after-first: (
+      query-string: 'nth-child(n + #{$number + 1})',
+      required-vars: number
+    ),
+    from-end: (
+      query-string: 'nth-last-child(#{$number})',
+      required-vars: number
+    ),
+    between: (
+      query-string: 'nth-child(n + #{$first}):nth-child(-n + #{$last})',
+      required-vars: first last
+    ),
+    even-between: (
+      query-string: 'nth-child(even):nth-child(n + #{$first}):nth-child(-n + #{$last})',
+      required-vars: first last
+    ),
+    odd-between: (
+      query-string: 'nth-child(odd):nth-child(n + #{$first}):nth-child(-n + #{$last})',
+      required-vars: first last
+    ),
+    n-between: (
+      query-string: 'nth-child(#{$number}n):nth-child(n + #{$first}):nth-child(-n + #{$last})',
+      required-vars: number first last
+    ),
+    all-but: (
+      query-string: 'not(:nth-child(#{$number}))',
+      required-vars: number
+    ),
+    each: (
+      query-string: 'nth-child(#{$number}n)',
+      required-vars: number
+    ),
+    every: (
+      query-string: 'nth-child(#{$number}n)',
+      required-vars: number
+    ),
+    from-first-last: (
+      query-string: 'nth-child(#{$number})' 'nth-last-child(#{$number})',
+      required-vars: number
+    ),
+    middle: (
+      query-string: 'nth-child(#{round($number / 2)})',
+      required-vars: number
+    ),
+    all-but-first-last: (
+      query-string: 'nth-child(n + #{$number}):nth-last-child(n + #{$number})',
+      required-vars: number
+    ),
+    first-of: (
+      query-string: 'nth-last-child(#{$limit}):first-child',
+      required-vars: limit
+    ),
+    last-of: (
+      query-string: 'nth-of-type(#{$limit}):nth-last-of-type(1)',
+      required-vars: limit
+    ),
+    at-least: (
+      query-string: 'nth-last-child(n + #{$number})' 'nth-last-child(n + #{$number}) ~ #{nth(nth($selector, -1), -1)}',
+      required-vars: number,
+    ),
+    at-most: (
+      query-string: 'nth-last-child(-n + #{$number}):first-child' 'nth-last-child(-n + #{$number}):first-child ~ #{nth(nth($selector, -1), -1)}',
+      required-vars: number,
+    ),
+    in-between: (
+      query-string: 'nth-last-child(n + #{$min}):nth-last-child(-n + #{$max}):first-child' 'nth-last-child(n + #{$min}):nth-last-child(-n + #{$max}):first-child ~ #{nth(nth($selector, -1), -1)}',
+      required-vars: min max,
+    ),
+    first-child: (
+      query-string: 'first-of-type',
+      required-vars: type
+    ),
+    last-child: (
+      query-string: 'last-of-type',
+      required-vars: type
+    ),
+    even: (
+      query-string: 'nth-child(even)',
+      required-vars: type
+    ),
+    odd: (
+      query-string: 'nth-child(odd)',
+      required-vars: type
+    ),
+    last-first: (
+      query-string: 'first-child' 'last-child',
+      required-vars: type
+    ),
+    unique: (
+      query-string: 'only-child',
+      required-vars: type
+    ),
+    only: (
+      query-string: 'only-child',
+      required-vars: type
+    ),
+    not-unique: (
+      query-string: 'not(:only-child)',
+      required-vars: type
+    )
+  ) !global;
+
+  @return $types;
+}
