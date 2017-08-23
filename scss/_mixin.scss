@@ -1,0 +1,80 @@
+
+
+/// @name Child Mixin
+/// Creates child selectors
+///
+/// @param {string} $type - Always required specifies what type of child query to export
+/// @param {intiger} $number [0] - Initger that may be required
+/// @param {intiger} $first [0] - Initger that may be required
+/// @param {intiger} $last [0] - Initger that may be required
+/// @param {intiger} $limit [0] - Initger that may be required
+/// @param {intiger} $min [0] - Initger that may be required
+/// @param {intiger} $max [0] - Initger that may be required
+/// @content [Child Contents]
+/// @output list in a map format (sm: 40px, lg: 80px)
+// @example:
+//        @include child((
+//          type: in-between,
+//          min: 4,
+//          max: 10
+//          )...) {
+//            color: color(greyscale, white);
+//          }
+
+@mixin child($type, $number: 0, $first: 0, $last: 0, $limit: 0, $min: 0, $max: 0, $types: $types) {
+  // Sets selector
+  $selector: '&';
+
+  // Sets up basic vars within map to be called
+  $config-args: (
+    type: $type,
+    number: $number,
+    first: $first,
+    last: $last,
+    limit: $limit,
+    min: $min,
+    max: $max,
+  );
+
+  // A small helper to list all avalible quieries
+  // Usage: @include child(help);
+  @if $type == help {
+    $keys: map-keys($types);
+    @each $key in $keys {
+      @debug 'Avalible Type: `#{$key}`';
+    }
+  }
+
+  // Checks that the key exit, if it does returns the map associated with that key
+  $query-map: validate-key($type, $types);
+
+  // Checks that the required vars were set within mixin, if they are not set return false with a error telling user what value need to be set -> returns true or false
+  $query-valid: validate-child-query($config-args, $query-map);
+
+  // Sets blank var to be passed through while loop
+  $final: ();
+
+  @if $query-valid == true {
+    // Gets list of strings
+    $query-string: map-get($query-map, query-string);
+    // Gets the length of the list
+    $length-value: length($query-string);
+    $count: 1;
+    // Loops through the list adds required commas and selectors
+    @while $count <= $length-value {
+      $string: nth($query-string, $count);
+      $combine: unquote($selector + ':' + $string);
+      $final: append($final, $combine, comma);
+      $count: $count + 1;
+    }
+
+    // Exports final string to be complied with content
+    #{$final} {
+      @content;
+    }
+  } @else {
+    // If it does not pass the valid query check throw error with message
+    $missing-required: nth($query-valid, 2);
+    @error 'Value is missing for `#{$missing-required}`';
+  }
+}

@@ -1,0 +1,40 @@
+
+/// @name Validate Child Query
+/// Validates the query
+/// @param {map} $config - A map containing all required vars across all queries
+/// @param {map} $query - A map of what query is being called
+/// @return {boolean} true or false -> If a var is missing return false
+
+@function validate-child-query($config, $query) {
+  $return-value: ();
+  $count: 1;
+
+  // Gets required vars within list
+  $validate: map-get($query, required-vars);
+  $length-value: length($validate);
+
+  // Runs through each required var and ensure it has a value set
+  @while $count <= $length-value {
+    $required-key: nth($validate, $count);
+    @if map-has-key($config, $required-key) {
+      $check-null: map-get($config, $required-key);
+
+      @if $check-null == null or $check-null == '' or $check-null == 0 {
+        // Adds false to return and what var is not set
+        $return-value: false, $required-key;
+        // Ends count since return false
+        $count: $length-value + 1;
+      } @else {
+        // Return true -> required vars have a value set
+        $return-value: true;
+      }
+    } @else {
+      // Adds false to return and what var is not set
+      $return-value: false, $required-key;
+      // Ends count since return false
+      $count: $length-value + 1;
+    }
+    $count: $count + 1;
+  }
+  @return $return-value;
+}
